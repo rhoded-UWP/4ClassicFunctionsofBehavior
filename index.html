@@ -112,6 +112,9 @@ details.ref[open] summary::after{content:"Hide"}
 .cert .dots i{width:16px;height:16px;border-radius:50%;display:block}
 .cert .who{font-family:var(--serif);font-size:34px;font-weight:700;margin:4px 0}
 .cert .when{color:var(--muted)}
+.dl{display:none;margin-top:18px}
+.dl.show{display:block}
+.dl-note{color:var(--muted);font-size:16px;margin:10px 0 0}
 .foot{color:var(--muted);font-size:15px;text-align:center;margin-top:30px}
 </style>
 </head>
@@ -165,7 +168,7 @@ details.ref[open] summary::after{content:"Hide"}
 
   <section class="card done" id="done" aria-live="polite">
     <h2>All sixteen, solved.</h2>
-    <p>Type your name to make a completion card. Take a screenshot of it and upload it to Canvas.</p>
+    <p>Type your name to make your certificate, then download it and upload the file to the Canvas assignment.</p>
     <form id="nameForm">
       <label for="nameInput" style="position:absolute;left:-9999px">Your name</label>
       <input id="nameInput" type="text" autocomplete="name" placeholder="First and last name" required>
@@ -177,6 +180,10 @@ details.ref[open] summary::after{content:"Hide"}
       <p class="who" id="certName"></p>
       <p>worked through all 16 incidents and correctly named the function of each one.</p>
       <p class="when" id="certWhen"></p>
+    </div>
+    <div class="dl" id="dlWrap">
+      <button class="btn primary" id="dlBtn" type="button">Download my certificate (PNG)</button>
+      <p class="dl-note">Download not working? Take a screenshot of the card above and upload that instead.</p>
     </div>
   </section>
 
@@ -570,6 +577,48 @@ $("nameForm").onsubmit = e => {
   $("certName").textContent = nm;
   $("certWhen").textContent = "Completed " + new Date().toLocaleString([], {dateStyle:"full", timeStyle:"short"});
   $("cert").classList.add("show");
+  $("dlWrap").classList.add("show");
+};
+
+/* ---------------- certificate download: drawn on a canvas, saved as PNG ---------------- */
+function drawCertificate(name, when){
+  const W = 1600, H = 1000, c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const x = c.getContext("2d");
+  const SERIF = 'Cambria, Caladea, Georgia, "Times New Roman", serif';
+  const SANS = 'Calibri, Carlito, "Segoe UI", Arial, sans-serif';
+  const cols = ["#E4572E","#F6B93B","#44A06B","#2E86C1","#8E6FC7"];
+  const rr = (X,Y,w,h,r) => { x.beginPath(); x.moveTo(X+r,Y); x.arcTo(X+w,Y,X+w,Y+h,r); x.arcTo(X+w,Y+h,X,Y+h,r); x.arcTo(X,Y+h,X,Y,r); x.arcTo(X,Y,X+w,Y,r); x.closePath(); };
+  x.fillStyle = "#EAF2FA"; x.fillRect(0,0,W,H);
+  cols.forEach((col,i) => { x.fillStyle = col; x.fillRect(i*W/5, 0, W/5+1, 22); });
+  rr(80,80,W-160,H-160,36); x.fillStyle = "#FDF2DE"; x.fill();
+  x.lineWidth = 6; x.strokeStyle = "#1D3557"; x.stroke();
+  x.textAlign = "center"; x.textBaseline = "alphabetic";
+  cols.forEach((col,i) => { x.beginPath(); x.arc(W/2 + (i-2)*48, 210, 15, 0, Math.PI*2); x.fillStyle = col; x.fill(); });
+  x.fillStyle = "#23704A"; x.font = "bold 34px " + SANS;
+  if ("letterSpacing" in x) x.letterSpacing = "4px";
+  x.fillText("TCHG 4030  ·  WHAT'S BEHIND IT?", W/2, 300);
+  if ("letterSpacing" in x) x.letterSpacing = "0px";
+  x.fillStyle = "#4F6A83"; x.font = "36px " + SANS;
+  x.fillText("Certificate of Completion", W/2, 370);
+  let size = 96; x.font = "bold " + size + "px " + SERIF;
+  while (x.measureText(name).width > W - 360 && size > 40){ size -= 4; x.font = "bold " + size + "px " + SERIF; }
+  x.fillStyle = "#1D3557"; x.fillText(name, W/2, 510);
+  x.fillStyle = "#F6B93B"; x.fillRect(W/2-150, 550, 300, 10);
+  x.fillStyle = "#1D3557"; x.font = "38px " + SANS;
+  x.fillText("worked through all 16 incidents and correctly named the", W/2, 650);
+  x.fillText("function of each one: attention, power, revenge, or cover up.", W/2, 702);
+  x.fillStyle = "#4F6A83"; x.font = "34px " + SANS;
+  x.fillText(when, W/2, 800);
+  return c;
+}
+$("dlBtn").onclick = () => {
+  const name = $("certName").textContent, when = $("certWhen").textContent;
+  const c = drawCertificate(name, when);
+  const file = "Functions-Certificate-" + (name.replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"") || "Student") + ".png";
+  const a = document.createElement("a");
+  a.download = file; a.href = c.toDataURL("image/png");
+  document.body.appendChild(a); a.click(); a.remove();
 };
 
 render();
