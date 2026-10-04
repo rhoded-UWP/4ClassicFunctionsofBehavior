@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's Behind It? | TCHG 4030</title>
+<meta name="description" content="Practice naming the classical function of a behavior: attention, power, revenge, or cover up.">
+<style>
+:root{
+  --bg:#EAF2FA; --card:#FDF2DE; --edge:#E2CFAE; --ink:#1D3557; --muted:#4F6A83;
+  --tomato:#E4572E; --tomato-d:#C0402A; --tomato-t:#FBE3DB;
+  --sun:#F6B93B;    --sun-d:#8A5110;    --sun-t:#FCEFCF;
+  --grass:#44A06B;  --grass-d:#23704A;  --grass-t:#DDEFE4;
+  --sky:#2E86C1;    --sky-d:#1B649A;    --sky-t:#DCEBF7;
+  --grape:#8E6FC7;  --grape-d:#61479E;  --grape-t:#E7E0F5;
+  --serif: Cambria, Caladea, Georgia, "Times New Roman", serif;
+  --sans: Calibri, Carlito, "Segoe UI", system-ui, -apple-system, sans-serif;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.5}
+.stripe{display:flex;height:10px}
+.stripe span{flex:1}
+.wrap{max-width:980px;margin:0 auto;padding:28px 16px 48px}
+.eyebrow{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:15px;color:var(--sky-d);margin:0 0 4px}
+h1{font-family:var(--serif);font-size:clamp(34px,6vw,50px);line-height:1.1;margin:0 0 10px}
+h2{font-family:var(--serif);margin:0}
+.lede{color:var(--muted);margin:0 0 22px;max-width:46em}
+.card{background:var(--card);border:1px solid var(--edge);border-radius:var(--r)}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--sky-d);outline-offset:2px}
+
+/* progress */
+.progress{padding:16px 18px;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.progress-top strong{font-family:var(--serif);font-size:22px}
+.progress-top span{color:var(--muted);font-size:16px}
+.tiles{display:grid;grid-template-columns:repeat(16,1fr);gap:6px}
+.tile{aspect-ratio:1;min-width:0;border-radius:9px;border:2px solid var(--edge);background:var(--bg);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;padding:0}
+.tile.solved{background:var(--grass-t);border-color:var(--grass-d);color:var(--grass-d)}
+.tile.current{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}
+@media (max-width:640px){.tiles{grid-template-columns:repeat(8,1fr)}}
+
+/* reference */
+details.ref{margin-bottom:16px;padding:0}
+details.ref summary{padding:14px 18px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.ref summary::-webkit-details-marker{display:none}
+details.ref summary::after{content:"Show";font-weight:400;color:var(--muted);font-size:16px}
+details.ref[open] summary::after{content:"Hide"}
+.ref-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 18px 18px}
+.ref-item{border-radius:10px;padding:12px;border-top:6px solid}
+.ref-item h3{font-family:var(--serif);margin:0 0 4px;font-size:20px}
+.ref-item p{margin:0 0 6px;font-size:16px;line-height:1.4}
+.ref-item p:last-child{margin:0}
+@media (max-width:820px){.ref-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.ref-grid{grid-template-columns:1fr}}
+
+/* incident */
+.incident{padding:22px 22px 24px}
+.inc-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.chip{display:inline-block;padding:4px 12px;border-radius:12px;font-weight:700;font-size:15px;letter-spacing:.04em;text-transform:uppercase;background:var(--sky-t);color:var(--sky-d);border:1px solid var(--sky-d)}
+.chip.sped{background:var(--grape-t);color:var(--grape-d);border-color:var(--grape-d)}
+.count{color:var(--muted);font-size:16px}
+.inc-name{font-size:30px;margin-bottom:4px}
+.context{color:var(--muted);margin:0 0 14px}
+.timeline{list-style:none;margin:0 0 14px;padding:0}
+.timeline li{position:relative;padding:10px 14px 10px 16px;margin-bottom:10px;background:var(--bg);border-radius:10px;border-left:6px solid var(--sun)}
+.timeline li.step{border-left-color:var(--sky)}
+.timeline .tag{display:block;font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.timeline .move{display:block;margin-bottom:6px}
+.timeline .move b{color:var(--sky-d)}
+.timeline li.new{animation:pop .35s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.timeline li.new{animation:none}}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.btn{border-radius:10px;padding:10px 16px;border:2px solid var(--ink);background:var(--card);font-weight:700}
+.btn.primary{background:var(--ink);color:var(--card)}
+.btn:disabled{opacity:.55;cursor:default}
+.gut{margin:8px 0 0;padding:10px 14px;border-radius:10px;background:var(--tomato-t);border:1px dashed var(--tomato-d)}
+.gut b{color:var(--tomato-d)}
+.question{font-family:var(--serif);font-size:22px;font-weight:700;margin:20px 0 10px}
+.answers{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:720px){.answers{grid-template-columns:1fr 1fr}}
+.ans{border-radius:12px;border:2px solid var(--edge);background:var(--bg);padding:14px 10px 12px;text-align:center;border-top-width:8px;min-height:84px}
+.ans .nm{display:block;font-family:var(--serif);font-weight:700;font-size:22px}
+.ans .st{display:block;font-size:15px;color:var(--muted);min-height:1.4em}
+.ans:hover:not(:disabled){background:var(--card)}
+.ans.wrong{opacity:.7;cursor:default}
+.ans.wrong .nm{text-decoration:line-through}
+.ans.right{background:var(--grass-t);border-color:var(--grass-d);border-top-color:var(--grass-d)}
+.ans.right .st{color:var(--grass-d);font-weight:700}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:12px;display:none}
+.feedback.show{display:block}
+.feedback.miss{background:var(--sun-t);border:2px solid var(--sun-d)}
+.feedback.hit{background:var(--grass-t);border:2px solid var(--grass-d)}
+.feedback h3{font-family:var(--serif);margin:0 0 6px;font-size:22px}
+.feedback p{margin:0 0 8px}
+.feedback p:last-child{margin:0}
+.feedback .label{font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:14px;display:block;margin-top:10px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+/* completion */
+.done{padding:26px 22px;margin-top:16px;display:none;text-align:center}
+.done.show{display:block}
+.done h2{font-size:32px;margin-bottom:6px}
+.done form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px 0 4px}
+.done input{font:inherit;padding:10px 14px;border-radius:10px;border:2px solid var(--muted);background:var(--bg);color:var(--ink);min-width:min(320px,100%)}
+.cert{display:none;margin:20px auto 0;max-width:620px;padding:26px 20px;border-radius:16px;background:var(--bg);border:3px solid var(--ink)}
+.cert.show{display:block}
+.cert .dots{display:flex;gap:8px;justify-content:center;margin-bottom:12px}
+.cert .dots i{width:16px;height:16px;border-radius:50%;display:block}
+.cert .who{font-family:var(--serif);font-size:34px;font-weight:700;margin:4px 0}
+.cert .when{color:var(--muted)}
+.foot{color:var(--muted);font-size:15px;text-align:center;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="stripe" aria-hidden="true"><span style="background:var(--tomato)"></span><span style="background:var(--sun)"></span><span style="background:var(--grass)"></span><span style="background:var(--sky)"></span><span style="background:var(--grape)"></span></div>
+
+<div class="wrap">
+  <p class="eyebrow">TCHG 4030 · Practice</p>
+  <h1>What's Behind It?</h1>
+  <p class="lede">Sixteen classroom incidents, 4K through 8th grade. The first time a student misbehaves tells you very little. Watch how they persist when the teacher responds, then name the most likely function. There is no score. Keep at it until all sixteen are solved.</p>
+
+  <section class="card progress" aria-label="Progress">
+    <div class="progress-top">
+      <strong id="solvedCount">0 of 16 solved</strong>
+      <span>Jump to any incident</span>
+    </div>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <details class="card ref">
+    <summary>Quick reference: the four functions</summary>
+    <div class="ref-grid">
+      <div class="ref-item" style="background:var(--sun-t);border-color:var(--sun)">
+        <h3 style="color:var(--sun-d)">Attention</h3>
+        <p><i>“I only count when someone is noticing me.”</i></p>
+        <p><b>When corrected:</b> stops, then starts again, often in a new form.</p>
+        <p><b>Teacher feels:</b> annoyed.</p>
+      </div>
+      <div class="ref-item" style="background:var(--tomato-t);border-color:var(--tomato)">
+        <h3 style="color:var(--tomato-d)">Power</h3>
+        <p><i>“I only count when I'm the one in control.”</i></p>
+        <p><b>When corrected:</b> escalates, or complies halfway, on their own terms.</p>
+        <p><b>Teacher feels:</b> challenged, angry.</p>
+      </div>
+      <div class="ref-item" style="background:var(--grape-t);border-color:var(--grape)">
+        <h3 style="color:var(--grape-d)">Revenge</h3>
+        <p><i>“I've been hurt, so I'll hurt back.”</i></p>
+        <p><b>When corrected:</b> gets more personal and more hurtful.</p>
+        <p><b>Teacher feels:</b> hurt.</p>
+      </div>
+      <div class="ref-item" style="background:var(--sky-t);border-color:var(--sky)">
+        <h3 style="color:var(--sky-d)">Cover Up</h3>
+        <p><i>“Better to look bad than to look like I can't.”</i></p>
+        <p><b>When corrected:</b> withdraws, shuts down, does less.</p>
+        <p><b>Teacher feels:</b> helpless.</p>
+      </div>
+    </div>
+  </details>
+
+  <main class="card incident" id="incident" aria-live="polite"></main>
+
+  <section class="card done" id="done" aria-live="polite">
+    <h2>All sixteen, solved.</h2>
+    <p>Type your name to make a completion card. Take a screenshot of it and upload it to Canvas.</p>
+    <form id="nameForm">
+      <label for="nameInput" style="position:absolute;left:-9999px">Your name</label>
+      <input id="nameInput" type="text" autocomplete="name" placeholder="First and last name" required>
+      <button class="btn primary" type="submit">Make my card</button>
+    </form>
+    <div class="cert" id="cert">
+      <div class="dots" aria-hidden="true"><i style="background:var(--tomato)"></i><i style="background:var(--sun)"></i><i style="background:var(--grass)"></i><i style="background:var(--sky)"></i><i style="background:var(--grape)"></i></div>
+      <p class="eyebrow" style="color:var(--grass-d)">TCHG 4030 · What's Behind It?</p>
+      <p class="who" id="certName"></p>
+      <p>worked through all 16 incidents and correctly named the function of each one.</p>
+      <p class="when" id="certWhen"></p>
+    </div>
+  </section>
+
+  <p class="foot">Functions based on Dreikurs's four goals of misbehavior and Albert's <i>Cooperative Discipline</i>. All students and situations are fictional.</p>
+</div>
+
+<script>
+const FN = {
+  attention:{name:"Attention", color:"var(--sun)",    deep:"var(--sun-d)"},
+  power:    {name:"Power",     color:"var(--tomato)", deep:"var(--tomato-d)"},
+  revenge:  {name:"Revenge",   color:"var(--grape)",  deep:"var(--grape-d)"},
+  coverup:  {name:"Cover Up",  color:"var(--sky)",    deep:"var(--sky-d)"}
+};
+const ORDER = ["attention","power","revenge","coverup"];
+
+const INCIDENTS = [
+{ grade:"4K", setting:"Circle time", name:"Theo", answer:"attention",
+  context:"Morning circle on the carpet, about fifteen four-year-olds.",
+  first:"During the calendar song, Theo flops onto his back and kicks his feet in the air.",
+  steps:[
+    {move:"You say, “Theo, criss-cross applesauce.”", resp:"He pops up right away and beams at you. A minute later, he starts barking like a puppy."},
+    {move:"You pause the song and wait, looking at him.", resp:"He stops instantly, checks who is watching, then scoots forward until his knees are touching your shoes."}
+  ],
+  gut:"Annoyed. Like swatting the same mosquito over and over.",
+  explain:"Every correction worked for a moment, and every one gave Theo what he was after: your eyes, your voice, a paused song. The behavior kept changing form (flopping, barking, scooting) but restarted whenever your attention moved on.",
+  firstMove:"Give Theo a circle-time job, like holding the pointer or flipping the calendar, and notice him often while he is sitting well, before he has to earn it.",
+  wrong:{
+    power:"Theo never refuses you. He complies instantly every time, which is the opposite of a power struggle.",
+    revenge:"Nothing here is aimed at hurting anyone. He is smiling and moving closer to you, not lashing out.",
+    coverup:"Circle time asks almost nothing hard of him, and he is moving toward the group, not away from a task."},
+  nudge:"Look at what he does the instant you correct him, and what he does right after."
+},
+{ grade:"Kindergarten", setting:"Cleanup time", name:"Ava", answer:"power",
+  context:"Center time is ending and the cleanup song is playing.",
+  first:"Ava keeps building her block tower. “I'm not done.”",
+  steps:[
+    {move:"You kneel down: “Blocks go in the bin now. You can build again tomorrow.”", resp:"She adds two more blocks, looking straight at you. “I'm. Not. Done.”"},
+    {move:"You start putting blocks in the bin yourself.", resp:"She grabs the bin, sits on it, and folds her arms. A few classmates stop to watch. “You can't make me.”"}
+  ],
+  gut:"Challenged. You notice yourself getting ready to win this one.",
+  explain:"Each step up from the teacher was met by a step up from Ava, with eye contact and, by the end, an audience. Escalating instead of stopping is the signature of power.",
+  firstMove:"Step out of the contest. Offer two real choices (“Do you want to put away the red blocks or the blue ones?”), give her a moment, and walk away so there is nobody to beat.",
+  wrong:{
+    attention:"A student after attention usually stops when noticed, at least for a moment. Ava gets more intense with every correction.",
+    revenge:"She is not trying to hurt you or anyone else. She is trying to stay in charge of her tower.",
+    coverup:"She is confident and capable here. Nothing about cleanup is too hard for her."},
+  nudge:"Watch whether each correction makes the behavior smaller or bigger."
+},
+{ grade:"1st grade", setting:"Reading group", name:"Jaylen", answer:"coverup",
+  context:"Small-group guided reading at the kidney table.",
+  first:"When you call his reading group to the table, Jaylen says he has to go to the bathroom.",
+  steps:[
+    {move:"You say, “Go quickly. We'll wait for you.”", resp:"He comes back eight minutes later. At the table he spins his book like a top, and the other kids giggle."},
+    {move:"You hand him the book open to his page and point to the first word.", resp:"He puts his head down on the table and whispers, “I'm not a good reader. Ask somebody else.”"}
+  ],
+  gut:"Helpless. You catch yourself wondering whether to just skip his turn.",
+  explain:"The bathroom trip and the spinning book could pass for escape or attention. But as the actual reading got closer, he shut down and named the fear. The misbehavior was covering for “I can't.”",
+  firstMove:"Keep the expectation and shrink the task. Pre-teach two or three words privately so he can read a page successfully in front of the group.",
+  wrong:{
+    attention:"The giggles were a side effect. When you gave him your full one-on-one attention, he withdrew instead of lighting up.",
+    power:"He never digs in or argues. He folds. A power-seeker gets bigger when pressed.",
+    revenge:"Nothing is aimed at you or a classmate. His last words are about himself."},
+  nudge:"Notice what happens as the reading itself gets closer."
+},
+{ grade:"2nd grade", setting:"Self-contained classroom", sped:true, name:"Mateo", answer:"power",
+  context:"Mateo is in a self-contained special education classroom and uses a visual schedule and a five-token board.",
+  first:"The visual schedule shows math next. Mateo pulls the math card off and tosses it behind the bookshelf.",
+  steps:[
+    {move:"You calmly point to the schedule: “First math, then computer.”", resp:"He moves the computer card to the top of the schedule himself and taps it. “Computer first. I decide.”"},
+    {move:"You move the card back and hold up his token board.", resp:"He peels all five of his earned tokens off the board, hands them to you, and says, “Keep 'em. I'm the boss.”"}
+  ],
+  gut:"Challenged. You feel your jaw tighten.",
+  explain:"The first move could have been avoiding math. But Mateo kept rearranging the schedule himself and gave up earned rewards to stay in charge. The fight is over who decides, not over whether math is too hard.",
+  firstMove:"Build real control into the routine: offer a choice inside the task (“Math on the whiteboard or with the counters?”) and let him be the one to move the card when it is finished.",
+  wrong:{
+    attention:"He is not seeking your notice. He hands back his rewards and claims the decision.",
+    revenge:"He is not trying to hurt you. “I'm the boss” is about control, not payback.",
+    coverup:"Worth checking, since math came first. But he never shows the work is too hard. He argues about the order, and gives up earned tokens to win that argument."},
+  nudge:"Look at what he says, and at what he is willing to give up."
+},
+{ grade:"3rd grade", setting:"After recess", name:"Brooklyn", answer:"revenge",
+  context:"Brooklyn was kept in from recess for pushing in line after a classmate, Emma, told you about it.",
+  first:"When the class comes back in, Brooklyn knocks the cup of markers off her table.",
+  steps:[
+    {move:"You say, “Brooklyn, please pick those up.”", resp:"She picks them up. Then she quietly snaps the cap off Emma's favorite gel pen."},
+    {move:"You move her to a desk next to yours for the afternoon.", resp:"She writes “I HATE YOU” in big letters on her math paper and slides it toward you."}
+  ],
+  gut:"Hurt. You feel stung, and maybe a flicker of wanting to get even.",
+  explain:"The trigger was a consequence she felt was unfair. Everything after that targeted the people she blamed: first Emma, then you. Hurting back is the signature of revenge.",
+  firstMove:"Don't punish the note in the moment; that confirms her belief that she is disliked. Later, privately, name it: “You were really mad about recess.” Then make a point of something small and positive with her tomorrow.",
+  wrong:{
+    attention:"Attention-seeking tends to stop when it gets noticed. Brooklyn's behavior gets sharper and more personal.",
+    power:"Close, since revenge often follows a power struggle the student lost. But she is not arguing about what she has to do. She is going after the people she blames.",
+    coverup:"There is no task she is avoiding. Every move is aimed at someone."},
+  nudge:"Look at who each behavior is aimed at."
+},
+{ grade:"3rd grade", setting:"Independent writing", name:"Liam", answer:"attention",
+  context:"Students are writing a personal narrative while you circulate.",
+  first:"Five minutes in, Liam calls out, “Is this right?” for the third time.",
+  steps:[
+    {move:"You say, “Try the next sentence on your own, then I'll check.”", resp:"He writes one word, then announces, “My pencil broke!” while holding up a pencil that is perfectly fine and grinning at you."},
+    {move:"You tap his paper and move to the next table without a word.", resp:"He follows you and taps your shoulder to show you a drawing. When you glance at his paper, the sentences he has written are strong."}
+  ],
+  gut:"Annoyed. You feel shadowed around the room.",
+  explain:"“Is this right?” might hint at cover up, but his writing is solid and he is not shutting down. He moves toward you, again and again. The help request is a ticket to your attention.",
+  firstMove:"Schedule the attention: “I'll check on you after I visit two tables.” Keep that promise, and comment on his work before he has to ask.",
+  wrong:{
+    power:"He is not refusing anything or digging in. He is following you, not fighting you.",
+    revenge:"Nothing is hurtful. He is cheerful and close.",
+    coverup:"Good instinct to check, since he asks for help so often. But his writing is strong and he moves toward you, not away from the task."},
+  nudge:"Look at the quality of his work, and which direction he moves."
+},
+{ grade:"4th grade", setting:"Resource room", sped:true, name:"Destiny", answer:"coverup",
+  context:"Destiny comes to the special education resource room for math. Her IEP has a goal for multi-digit subtraction.",
+  first:"You hand out a page of subtraction with regrouping. Destiny says she left her glasses in her classroom.",
+  steps:[
+    {move:"You hand her a large-print copy.", resp:"She asks for a drink. Then to see the nurse. Then says her stomach hurts."},
+    {move:"You sit down beside her and start the first problem together.", resp:"She pushes the paper off the table, pulls her hood up, and says, “Just mark it wrong. I'm always gonna be bad at math.”"}
+  ],
+  gut:"Helpless. Nothing you offer seems to be enough.",
+  explain:"Glasses, drink, nurse, stomach: a string of reasons not to start. When the excuses were gone and you were right beside the task, she said it out loud: she expects to fail. Albert calls the stomachache version “temporary incapacitation.”",
+  firstMove:"Start where success is certain: one problem she already knows, then a regrouping problem with the first step done for her. Notice the effort, quietly.",
+  wrong:{
+    attention:"By the end she had your full one-on-one attention, and she pulled even further away.",
+    power:"She never argues about who is in charge. She is asking you to give up on her.",
+    revenge:"“Just mark it wrong” is aimed at herself, not at you."},
+  nudge:"Notice what happens each time an excuse is taken away."
+},
+{ grade:"4th grade", setting:"Start of class", name:"Owen", answer:"power",
+  context:"The building does not allow hats indoors.",
+  first:"Owen walks into class wearing a baseball cap.",
+  steps:[
+    {move:"You say, “Hat off, please, Owen.”", resp:"He takes it off, then puts it right back on as soon as you turn around."},
+    {move:"You say, “Owen, the hat goes in your locker.”", resp:"Loudly: “Other teachers let me. You're not my mom.” He turns the hat around backward."},
+    {move:"You hold out your hand for the hat.", resp:"He stuffs it up his shirt and grins at the class. “What hat?”"}
+  ],
+  gut:"Angry. It has started to feel like a test of who is in charge.",
+  explain:"The first response alone could look like attention. But every correction after it got a bigger, louder answer in front of his peers. The backward hat and “What hat?” are him keeping score.",
+  firstMove:"Remove the audience. Quietly: “We'll talk about the hat at lunch.” Then do it, privately, and give him a real choice: locker or your desk drawer.",
+  wrong:{
+    attention:"His first response might look like attention. But after the second correction he argues and escalates instead of stopping.",
+    revenge:"There is no hurt aimed at you, just a contest. “You're not my mom” is a claim about who gets to decide.",
+    coverup:"Nothing here is hard for him. He is confident, not hiding."},
+  nudge:"Track the second and third responses. Smaller, or bigger?"
+},
+{ grade:"5th grade", setting:"Science, with a paraprofessional", sped:true, name:"Caleb", answer:"attention",
+  context:"Caleb has an IEP and a paraprofessional who supports him during general education science.",
+  first:"During a lab demonstration, Caleb starts making loud beeping noises.",
+  steps:[
+    {move:"His para leans in and whispers a reminder.", resp:"He stops. As soon as she turns to help another student, the beeping starts again."},
+    {move:"The para moves her chair right next to his and stays there.", resp:"He goes quiet and works for as long as she is beside him. The moment she stands up, he beeps."}
+  ],
+  gut:"Annoyed, and a little worn down by all the reminders.",
+  explain:"The pattern is clean: beeping stops when an adult is close and starts when the adult leaves. In special education this can grow into prompt dependence, where adult attention becomes the reward. (If he kept beeping with the para right there, you would wonder about a sensory function from the ABA set instead.)",
+  firstMove:"Give attention for working before it is lost: the para checks in on a short timer and praises the work, so beeping is not the only way to bring her back. A good topic for the IEP team.",
+  wrong:{
+    power:"He is not defying anyone. He complies right away whenever an adult is near.",
+    revenge:"Nothing here is aimed at hurting anyone.",
+    coverup:"He works fine when the para is beside him, so the task itself is not what he is avoiding."},
+  nudge:"Look at exactly when the beeping starts and when it stops."
+},
+{ grade:"5th grade", setting:"Group project", name:"Harper", answer:"revenge",
+  context:"Harper's group voted to use a classmate's idea, Maddie's, for their poster instead of hers.",
+  first:"Harper stops talking to her group.",
+  steps:[
+    {move:"You check in: “Harper, the group needs you. Could you do the lettering?”", resp:"She does the lettering, and misspells the title in permanent marker."},
+    {move:"You ask her to stay after class to talk about it.", resp:"The next morning the poster is in the recycling bin, and a classmate tells you Harper has been telling people that Maddie “copies everything.”"}
+  ],
+  gut:"Hurt, and worried about Maddie.",
+  explain:"She felt rejected by the vote, and each step since has damaged the group's work and the classmate whose idea won. Revenge does not always target the teacher. It targets whoever the student feels hurt by.",
+  firstMove:"Protect Maddie first and help the group repair the poster. Then talk with Harper privately about the hurt underneath (“It stings when your idea isn't picked”) before any consequence.",
+  wrong:{
+    attention:"She is pulling away from the group, not seeking notice, and the damage is done out of sight.",
+    power:"She is not fighting you over a rule or a demand. Her target is a classmate.",
+    coverup:"She is capable of the work. Ruining it on purpose is about payback, not “I can't.”"},
+  nudge:"Ask who gets hurt by each move."
+},
+{ grade:"6th grade", setting:"Math", name:"Diego", answer:"coverup",
+  context:"You are asking students to work fraction problems on the board.",
+  first:"You call Diego up. He bows to the class: “Ladies and gentlemen, the greatest mathematician of all time.”",
+  steps:[
+    {move:"You smile and hand him the marker.", resp:"He draws a pizza cut into slices, gets a big laugh, and erases it."},
+    {move:"You say quietly, “Show me just the first step.”", resp:"He freezes, sets the marker down, and says, “This is boring. Can I sit down?” Back at his desk, his notebook page for today is blank."}
+  ],
+  gut:"Helpless, and a little confused, since he seemed so confident.",
+  explain:"The comedy looks like attention. But watch what happened when the task got specific: he froze and asked to leave. The blank page confirms it. Being funny in front of sixth graders is safer than being wrong.",
+  firstMove:"Don't send him to the board cold. Preview the problem with him privately first so his public moment is a success, and let him keep the humor.",
+  wrong:{
+    attention:"This is the trap answer. He loves the laugh, but when you gave him the spotlight to do the math, he wanted off the stage.",
+    power:"He does not refuse you or argue. He deflects, then asks to sit down.",
+    revenge:"Nobody is being hurt. The jokes are protecting him."},
+  nudge:"Watch the moment the actual math is required."
+},
+{ grade:"6th grade", setting:"Check-in / check-out plan", sped:true, name:"Marcus", answer:"revenge",
+  context:"Marcus has an IEP for an emotional behavioral disability and a behavior plan with a daily point sheet. Yesterday a substitute gave him a zero for the whole day.",
+  first:"When you hand Marcus today's point sheet, he crumples it up.",
+  steps:[
+    {move:"You smooth it out and say, “Fresh start today.”", resp:"He says, “You people always lie,” and kicks the leg of your desk on the way to his seat."},
+    {move:"You give him a calm reminder of his plan.", resp:"Later, he announces to the class that you “got fired from your last school,” and laughs when a few kids gasp."}
+  ],
+  gut:"Hurt. It is hard not to take it personally.",
+  explain:"He is carrying a hurt from yesterday and aiming it at the adults who represent the system (“you people”). Each response got more personal, ending with an attack on your reputation. That is revenge.",
+  firstMove:"Stay calm and don't defend yourself to the class. Later, privately, acknowledge yesterday (“That zero felt unfair”) and work with his case manager on how the point sheet is handled with subs. Students with this pattern need repeated proof that adults don't hurt back.",
+  wrong:{
+    attention:"The class's reaction is a bonus. The goal is to hurt you, not to be noticed.",
+    power:"He is not refusing work or arguing over a demand. He is going after your reputation.",
+    coverup:"There is no task he is avoiding here."},
+  nudge:"Look at what happened yesterday, and at who each move targets."
+},
+{ grade:"7th grade", setting:"Science notes", name:"Zoe", answer:"attention",
+  context:"You are walking the class through notes on cell structure.",
+  first:"Zoe drops her metal water bottle. It clangs and rolls under three desks.",
+  steps:[
+    {move:"You pause until she gets it back.", resp:"Five minutes later she sneezes three times, each one louder, then says, “Sorry! Bless me!” The class laughs."},
+    {move:"You keep teaching without reacting.", resp:"She raises her hand, and when you call on her, asks if you've seen the new superhero movie. When you redirect her, she says “OK!” cheerfully and goes back to her notes, for a while."}
+  ],
+  gut:"Annoyed. More like a gnat than a threat.",
+  explain:"Each behavior is a new bid for the room's attention. It stops cheerfully when addressed, and then a new one starts. In middle school, the attention is often from peers as much as from the teacher.",
+  firstMove:"Give her a legitimate spotlight, like reading the lab steps aloud or sharing first. Then catch her eye and nod when she is on task.",
+  wrong:{
+    power:"She says “OK!” and complies when redirected. There is no digging in.",
+    revenge:"Nothing is aimed at hurting anyone. She is playing to the crowd.",
+    coverup:"She is taking notes fine. There is no sign the work is too hard."},
+  nudge:"Watch her reaction when you redirect her."
+},
+{ grade:"7th grade", setting:"English language arts", name:"Aiden", answer:"coverup",
+  context:"The class is reading a novel and writing short responses each week.",
+  first:"Aiden has not turned in the last three reading responses.",
+  steps:[
+    {move:"You ask him about it before class.", resp:"He shrugs. “I forgot. Plus that book is boring.”"},
+    {move:"You give him an extension and a sheet of sentence starters.", resp:"He turns in his name and one sentence: “I didn't like the book.”"},
+    {move:"You sit with him and ask him to read one paragraph aloud to you.", resp:"He stumbles over several words, then stops. “Forget it. Just give me the zero. I don't care about grades.”"}
+  ],
+  gut:"Helpless, and frustrated that he won't take the help.",
+  explain:"“I forgot” and “it's boring” sound like apathy. The read-aloud uncovered the real issue: the text is too hard for him, and “I don't care” is safer than being seen struggling. In seventh grade, a zero is less embarrassing than “can't read.”",
+  firstMove:"Look up his reading data and talk with the reading specialist. Offer the novel as an audiobook or at his level so he can show what he understands.",
+  wrong:{
+    attention:"He avoids attention. He wanted every one of these conversations to end.",
+    power:"He is not fighting you. He is asking you to give up on him.",
+    revenge:"“Just give me the zero” is aimed at himself, not at you."},
+  nudge:"What did the read-aloud reveal?"
+},
+{ grade:"8th grade", setting:"Opening activity", name:"Nevaeh", answer:"power",
+  context:"The school expects phones to be put away in bags during class.",
+  first:"Nevaeh is texting during the opening activity.",
+  steps:[
+    {move:"You say, “Phone in your bag, please.”", resp:"She sets it face down on the desk, not in the bag. “It's away.”"},
+    {move:"You walk over: “In your bag.”", resp:"She glances at her friends, slides it into her back pocket, and says, “Happy?” with a smirk."},
+    {move:"You tell her she can hand you the phone or go to the office.", resp:"She stands up. “Whatever. I'll go.” She walks out slowly and loudly, so the whole class watches."}
+  ],
+  gut:"Angry. Like she is daring you.",
+  explain:"Every response is half compliance, done on her terms and for an audience. The ultimatum gave her a stage and a way to win: she picked the exit herself.",
+  firstMove:"Skip the public ultimatum. Use a private, calm check (“I need it in the bag. I'll check back in a minute.”) and walk away, so she can comply without losing face.",
+  wrong:{
+    attention:"Attention-seeking stops when it gets noticed. She escalates and keeps score with her friends.",
+    revenge:"She is not trying to hurt you. She is trying to win.",
+    coverup:"The opening activity is not too hard for her. This is about control, not ability."},
+  nudge:"Watch how she complies: fully, or just enough to stay in control?"
+},
+{ grade:"8th grade", setting:"After a call home", name:"Tyler", answer:"revenge",
+  context:"Yesterday you called Tyler's dad about missing work.",
+  first:"Today Tyler won't make eye contact and turns his chair to face away from you.",
+  steps:[
+    {move:"You greet him at the door the way you always do.", resp:"He walks past and mutters “snitch,” loud enough for you to hear."},
+    {move:"You let it go and start class.", resp:"Later that week you find the plant on your desk dumped out and the pencils in your lending cup snapped in half. Two students tell you Tyler did it."}
+  ],
+  gut:"Hurt, and honestly a little betrayed.",
+  explain:"Tyler felt betrayed by the phone call. Everything since has been aimed at you and your things. Revenge often starts with a hurt the adult never intended.",
+  firstMove:"Don't retaliate or lecture. Privately: “I think the call home felt like I went behind your back.” Explain why you called, and ask how he would want you to handle it next time. Deal with the damage separately and calmly.",
+  wrong:{
+    attention:"He is avoiding you, not seeking you out.",
+    power:"There is no demand he is resisting. He is getting even.",
+    coverup:"Missing work started it, but he is no longer avoiding a task. He is targeting you."},
+  nudge:"What happened right before this started?"
+}
+];
+
+/* ---------------- state (in memory only) ---------------- */
+const state = INCIDENTS.map(() => ({revealed:0, gut:false, tried:[], solved:false}));
+let cur = 0;
+
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+function renderTiles(){
+  const n = state.filter(s => s.solved).length;
+  $("solvedCount").textContent = n + " of 16 solved";
+  $("tiles").innerHTML = INCIDENTS.map((inc,i) => {
+    const s = state[i];
+    const cls = ["tile", s.solved?"solved":"", i===cur?"current":""].join(" ");
+    const lbl = "Incident " + (i+1) + ", " + inc.grade + (s.solved ? ", solved" : ", not solved yet");
+    return `<button class="${cls}" data-i="${i}" aria-label="${lbl}" ${i===cur?'aria-current="true"':""}>${s.solved?"✓":i+1}</button>`;
+  }).join("");
+  $("tiles").querySelectorAll(".tile").forEach(b => b.onclick = () => go(+b.dataset.i));
+  $("done").classList.toggle("show", n === INCIDENTS.length);
+}
+
+function render(animateIdx){
+  const inc = INCIDENTS[cur], s = state[cur];
+  const total = inc.steps.length, left = total - s.revealed;
+
+  let tl = `<li><span class="tag">What happens first</span>${esc(inc.first)}</li>`;
+  inc.steps.slice(0, s.revealed).forEach((st, k) => {
+    tl += `<li class="step${k===animateIdx?" new":""}"><span class="tag">Then</span>
+      <span class="move"><b>Teacher:</b> ${esc(st.move)}</span>
+      <span><b>${esc(inc.name)}:</b> ${esc(st.resp)}</span></li>`;
+  });
+
+  const answers = ORDER.map(k => {
+    const f = FN[k], tried = s.tried.includes(k), right = s.solved && k === inc.answer;
+    const cls = ["ans", tried?"wrong":"", right?"right":""].join(" ");
+    const st = right ? "✓ Correct" : tried ? "✕ Not this one" : "";
+    const dis = (tried || s.solved) ? "disabled" : "";
+    return `<button class="${cls}" data-k="${k}" ${dis} style="border-top-color:${right?"var(--grass-d)":f.color}">
+      <span class="nm" style="color:${right?"var(--grass-d)":f.deep}">${f.name}</span><span class="st">${st}</span></button>`;
+  }).join("");
+
+  let fb = "";
+  const last = s.tried[s.tried.length - 1];
+  if (s.solved){
+    const early = s.earlyNote ? `<p><i>You called it before seeing everything. In a real classroom that first read is a guess, so the rest of the incident is shown above. Check that it confirms your answer.</i></p>` : "";
+    fb = `<div class="feedback hit show" role="status"><h3>Yes: ${FN[inc.answer].name}</h3>${early}
+      <p>${esc(inc.explain)}</p>
+      <span class="label" style="color:var(--grass-d)">A good first move</span><p>${esc(inc.firstMove)}</p></div>`;
+  } else if (last){
+    const more = left > 0 ? ` There ${left===1?"is":"are"} still ${left} more step${left===1?"":"s"} to reveal, and that is usually where the answer shows.` : "";
+    const hint = !s.gut ? " You can also check how the teacher feels." : "";
+    fb = `<div class="feedback miss show" role="status"><h3>Probably not ${FN[last].name}</h3>
+      <p>${esc(inc.wrong[last])}</p><p><b>Look again:</b> ${esc(inc.nudge)}${more}${hint}</p></div>`;
+  }
+
+  $("incident").innerHTML = `
+    <div class="inc-head">
+      <span class="chip${inc.sped?" sped":""}">${esc(inc.grade)} · ${esc(inc.setting)}</span>
+      <span class="count">Incident ${cur+1} of 16</span>
+    </div>
+    <h2 class="inc-name">${esc(inc.name)}</h2>
+    <p class="context">${esc(inc.context)}</p>
+    <ol class="timeline">${tl}</ol>
+    <div class="tools">
+      <button class="btn primary" id="nextStep" ${left===0?"disabled":""}>${left===0?"That's everything":"What happens next? ("+left+" more)"}</button>
+      <button class="btn" id="gutBtn" ${s.gut?"disabled":""}>How does the teacher feel?</button>
+    </div>
+    ${s.gut ? `<p class="gut"><b>Teacher's gut reaction:</b> ${esc(inc.gut)}</p>` : ""}
+    <p class="question">What is the most likely function?</p>
+    <div class="answers">${answers}</div>
+    ${fb}
+    <div class="nav">
+      <button class="btn" id="prevBtn">← Previous</button>
+      <button class="btn ${s.solved?"primary":""}" id="nextBtn">${nextLabel()}</button>
+    </div>`;
+
+  $("nextStep").onclick = () => { s.revealed++; render(s.revealed - 1); };
+  $("gutBtn").onclick = () => { s.gut = true; render(); };
+  $("incident").querySelectorAll(".ans").forEach(b => b.onclick = () => pick(b.dataset.k));
+  $("prevBtn").onclick = () => go((cur + 15) % 16);
+  $("nextBtn").onclick = () => go(nextTarget());
+  renderTiles();
+}
+
+function nextTarget(){
+  for (let d = 1; d <= 16; d++){ const j = (cur + d) % 16; if (!state[j].solved) return j; }
+  return (cur + 1) % 16;
+}
+function nextLabel(){
+  const unsolved = state.filter(s => !s.solved).length;
+  if (unsolved === 0) return "Next →";
+  return state[cur].solved ? "Next unsolved →" : "Skip for now →";
+}
+
+function pick(k){
+  const inc = INCIDENTS[cur], s = state[cur];
+  if (s.solved || s.tried.includes(k)) return;
+  if (k === inc.answer){
+    s.solved = true;
+    if (s.revealed < inc.steps.length){ s.earlyNote = true; s.revealed = inc.steps.length; }
+    render();
+    if (state.every(x => x.solved)) setTimeout(() => $("done").scrollIntoView({behavior:"smooth", block:"start"}), 400);
+  } else {
+    s.tried.push(k);
+    render();
+  }
+}
+
+function go(i){ cur = i; render(); $("incident").scrollIntoView({behavior:"smooth", block:"start"}); }
+
+$("nameForm").onsubmit = e => {
+  e.preventDefault();
+  const nm = $("nameInput").value.trim();
+  if (!nm) return;
+  $("certName").textContent = nm;
+  $("certWhen").textContent = "Completed " + new Date().toLocaleString([], {dateStyle:"full", timeStyle:"short"});
+  $("cert").classList.add("show");
+};
+
+render();
+</script>
+</body>
+</html>
